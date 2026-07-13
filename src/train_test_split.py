@@ -54,7 +54,9 @@ if __name__ == "__main__":
     from src.preprocessing import Preprocessor
     from src.sequence_generator import SequenceGenerator
  
-    DATA_PATH = "data/airline_passengers.csv"
+    from src.utils import resolve_path
+
+    DATA_PATH = resolve_path("data/airline_passengers.csv")
  
     # Load Dataset
     loader = DataLoader(DATA_PATH)

@@ -11,7 +11,8 @@ Purpose: Load and validate the dataset
  
 # Import required libraries
 import pandas as pd
-import os
+from pathlib import Path
+from src.utils import resolve_path
  
  
 class DataLoader:
@@ -25,11 +26,11 @@ class DataLoader:
  
         Parameters
         ----------
-        file_path : str
+        file_path : str or Path
             Path of the CSV dataset.
         """
  
-        self.file_path = file_path
+        self.file_path = resolve_path(file_path) if isinstance(file_path, str) else Path(file_path)
  
     def load_data(self):
         """
@@ -43,7 +44,7 @@ class DataLoader:
         # -----------------------------
         # Step 1 : Check file existence
         # -----------------------------
-        if not os.path.exists(self.file_path):
+        if not self.file_path.exists():
             raise FileNotFoundError(
                 f"Dataset not found at:\n{self.file_path}"
             )

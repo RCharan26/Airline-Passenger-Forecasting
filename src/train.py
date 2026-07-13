@@ -13,13 +13,14 @@ from src.preprocessing import Preprocessor
 from src.sequence_generator import SequenceGenerator
 from src.train_test_split import TimeSeriesSplit
 from src.model import ModelBuilder
+from src.utils import resolve_path
  
  
 class ModelTrainer:
  
     def __init__(self):
  
-        self.data_path = "data/airline_passengers.csv"
+        self.data_path = resolve_path("data/airline_passengers.csv")
  
     def train(self):
  
@@ -94,9 +95,11 @@ class ModelTrainer:
         # Step 7 : Save Model
         # ----------------------------
  
-        model.save("models/lstm_model.keras")
+        model_path = resolve_path("models/lstm_model.keras")
+        model_path.parent.mkdir(parents=True, exist_ok=True)
+        model.save(model_path)
  
-        print("\nModel Saved Successfully.")
+        print(f"\nModel Saved Successfully to {model_path}.")
  
         return model, history
    
@@ -105,5 +108,3 @@ if __name__ == "__main__":
     trainer = ModelTrainer()
  
     model, history = trainer.train()
- 
- 

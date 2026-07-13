@@ -18,6 +18,7 @@ from sklearn.metrics import (
 )
  
 from src.predict import Predictor
+from src.utils import resolve_path
  
  
 class Evaluator:
@@ -67,8 +68,11 @@ class Evaluator:
         # Save Metrics
         # -----------------------------
  
+        metrics_file_path = resolve_path("outputs/metrics.txt")
+        metrics_file_path.parent.mkdir(parents=True, exist_ok=True)
+ 
         with open(
-            "outputs/metrics.txt",
+            metrics_file_path,
             "w"
         ) as file:
  

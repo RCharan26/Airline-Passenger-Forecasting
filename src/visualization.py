@@ -11,6 +11,7 @@ Purpose: Visualize Model Performance
 """
  
 import matplotlib.pyplot as plt
+from src.utils import resolve_path
  
  
 class Visualizer:
@@ -49,11 +50,13 @@ class Visualizer:
  
         plt.grid(True)
  
-        plt.savefig("outputs/loss_curve.png")
+        save_path = resolve_path("outputs/loss_curve.png")
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_path)
  
         plt.show()
  
-        print("Training Loss Graph Saved Successfully.")
+        print(f"Training Loss Graph Saved Successfully to {save_path}.")
  
     def plot_predictions(self, actual, predicted):
         """
@@ -84,11 +87,13 @@ class Visualizer:
  
         plt.grid(True)
  
-        plt.savefig("outputs/prediction.png")
+        save_path = resolve_path("outputs/prediction.png")
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_path)
  
         plt.show()
  
-        print("Prediction Graph Saved Successfully.")
+        print(f"Prediction Graph Saved Successfully to {save_path}.")
  
     def plot_future_forecast(self, future_values):
         """
@@ -111,11 +116,13 @@ class Visualizer:
  
         plt.grid(True)
  
-        plt.savefig("outputs/forecast.png")
+        save_path = resolve_path("outputs/forecast.png")
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_path)
  
         plt.show()
  
-        print("Forecast Graph Saved Successfully.")
+        print(f"Forecast Graph Saved Successfully to {save_path}.")
  
 if __name__ == "__main__":
  

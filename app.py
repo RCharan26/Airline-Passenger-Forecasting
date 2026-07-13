@@ -40,9 +40,14 @@ st.set_page_config(
 # ═══════════════════════════════════════════════════════════════════════════════
 # CONSTANTS
 # ═══════════════════════════════════════════════════════════════════════════════
-DATA_PATH   = "data/airline_passengers.csv"
-MODEL_PATH  = "models/lstm_models.keras"
-SCALER_PATH = "models/scaler.pkl"
+from src.utils import resolve_path
+
+DATA_PATH   = resolve_path("data/airline_passengers.csv")
+SCALER_PATH = resolve_path("models/scaler.pkl")
+
+def get_model_path(m_type: str):
+    return resolve_path(f"models/{m_type}_model.keras")
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # GLOBAL CSS + ANIMATIONS
@@ -410,10 +415,10 @@ with st.sidebar:
     run_btn = st.button("🚀  Run Forecast")
     st.markdown("---")
 
-    components.html("""
+    components.html(f"""
 <style>
-@keyframes borderGlow{0%,100%{border-color:rgba(56,189,248,.18)}50%{border-color:rgba(129,140,248,.55)}}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes borderGlow{{0%,100%{{border-color:rgba(56,189,248,.18)}}50%{{border-color:rgba(129,140,248,.55)}}}}
+@keyframes fadeInUp{{from{{opacity:0;transform:translateY(12px)}}to{{opacity:1;transform:translateY(0)}}}}
 </style>
 <div style="border:1px solid rgba(56,189,248,.18);border-radius:12px;padding:13px 15px;
   animation:borderGlow 2.5s ease-in-out infinite,fadeInUp .8s ease forwards;
@@ -421,11 +426,12 @@ with st.sidebar:
   <div style="font-size:10.5px;color:#334155;font-weight:700;letter-spacing:.1em;margin-bottom:4px;">📂 DATASET</div>
   <div style="font-size:12px;color:#475569;">Airline Passengers 1949-1960</div>
   <div style="font-size:10.5px;color:#334155;font-weight:700;letter-spacing:.1em;margin:10px 0 4px;">💾 MODEL PATH</div>
-  <div style="font-size:11px;color:#475569;">models/lstm_models.keras</div>
+  <div style="font-size:11px;color:#475569;">models/{model_type}_model.keras</div>
   <div style="font-size:10.5px;color:#334155;font-weight:700;letter-spacing:.1em;margin:10px 0 4px;">⚖️ SCALER PATH</div>
   <div style="font-size:11px;color:#475569;">models/scaler.pkl</div>
 </div>
 """, height=160)
+
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -627,7 +633,10 @@ with tab2:
         )
 
         prog.progress(90, text="💾  Saving model & scaler…")
-        model.save(MODEL_PATH)
+        m_path = get_model_path(model_type)
+        m_path.parent.mkdir(parents=True, exist_ok=True)
+        model.save(m_path)
+
 
         prog.progress(100, text="✅  Complete!")
         prog.empty()
@@ -789,6 +798,8 @@ with tab3:
 
     model_ready = False
 
+    m_path = get_model_path(model_type)
+
     if "model" in st.session_state:
         model     = st.session_state["model"]
         scaler    = st.session_state["scaler"]
@@ -797,11 +808,12 @@ with tab3:
         seq_len_f = st.session_state["seq_len"]
         model_ready = True
 
-    elif os.path.exists(MODEL_PATH) and os.path.exists(SCALER_PATH):
+    elif m_path.exists() and SCALER_PATH.exists():
         try:
             from tensorflow.keras.models import load_model as _lm
-            model      = _lm(MODEL_PATH)
+            model      = _lm(m_path)
             scaler     = joblib.load(SCALER_PATH)
+
             pp2        = Preprocessor()
             pp2.scaler = scaler
             scaled_df  = pp2.scale_data(df)

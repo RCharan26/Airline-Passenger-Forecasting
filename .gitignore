@@ -9,10 +9,11 @@ env/
 
 .ipynb_checkpoints/
 
-models/
+models/*
+!models/.gitkeep
+
 *.h5
 *.keras
-
 *.pkl
 
 .streamlit/secrets.toml

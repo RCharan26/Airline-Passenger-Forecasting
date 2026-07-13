@@ -15,6 +15,7 @@ import joblib
 import pandas as pd
  
 from sklearn.preprocessing import MinMaxScaler
+from src.utils import resolve_path
  
  
 class Preprocessor:
@@ -59,9 +60,11 @@ class Preprocessor:
         # print(scaled_df.head())
  
         # Save the scaler
-        joblib.dump(self.scaler, "models/scaler.pkl")
+        scaler_path = resolve_path("models/scaler.pkl")
+        scaler_path.parent.mkdir(parents=True, exist_ok=True)
+        joblib.dump(self.scaler, scaler_path)
  
-        print("\nScaler saved successfully.")
+        print(f"\nScaler saved successfully to {scaler_path}.")
  
         return scaled_df
  

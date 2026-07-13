@@ -60,10 +60,13 @@ if __name__ == "__main__":
     from src.data_loader import DataLoader
     from src.preprocessing import Preprocessor
  
-    DATA_PATH = "data/airline_passengers.csv"
- 
+    from src.utils import resolve_path
+
+    DATA_PATH = resolve_path("data/airline_passengers.csv")
+
     # Load dataset
     loader = DataLoader(DATA_PATH)
+
     df = loader.load_data()
  
     # Scale dataset

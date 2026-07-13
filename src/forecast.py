@@ -17,19 +17,21 @@ from tensorflow.keras.models import load_model
  
 from src.data_loader import DataLoader
 from src.preprocessing import Preprocessor
+from src.utils import resolve_path
  
  
 class Forecaster:
  
     def __init__(self):
  
-        self.data_path = "data/airline_passengers.csv"
+        self.data_path = resolve_path("data/airline_passengers.csv")
  
-        self.model_path = "models/lstm_model.keras"
+        self.model_path = resolve_path("models/lstm_model.keras")
  
-        self.scaler_path = "models/scaler.pkl"
+        self.scaler_path = resolve_path("models/scaler.pkl")
  
         self.sequence_length = 12
+
  
     def forecast(self, future_months=12):
  

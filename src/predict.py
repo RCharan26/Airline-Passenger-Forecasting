@@ -19,17 +19,18 @@ from src.data_loader import DataLoader
 from src.preprocessing import Preprocessor
 from src.sequence_generator import SequenceGenerator
 from src.train_test_split import TimeSeriesSplit
+from src.utils import resolve_path
  
  
 class Predictor:
  
     def __init__(self):
  
-        self.data_path = "data/airline_passengers.csv"
+        self.data_path = resolve_path("data/airline_passengers.csv")
  
-        self.model_path = "models/lstm_model.keras"
+        self.model_path = resolve_path("models/lstm_model.keras")
  
-        self.scaler_path = "models/scaler.pkl"
+        self.scaler_path = resolve_path("models/scaler.pkl")
  
     def predict(self):
  
